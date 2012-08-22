@@ -2247,28 +2247,3 @@ class ThreeWP_Broadcast extends ThreeWP_Broadcast_Base
 
 $threewp_broadcast = new ThreeWP_Broadcast();
 
-
-if ( ! wp_next_scheduled( 'comment_harvest_time' ) ) {
-  wp_schedule_event( time(), 'daily', 'comment_harvest_time' );
-}
-
-add_action( 'comment_harvest_time', 'comment_count_harvester' );
-
-function comment_count_harvester() {
-	
-	foreach( $options['blogs'] as $blog)
-	{
-
-		//for each broadcasted vender post.
-			//get the post's comment count
-			//get array of client blogs
-				//for each client blog get the client post.
-					//for each client post not marked as having recieved an update
-						//push the comment count to a meta field for the client post
-						//mark the client post as having received an update
-				
-		//if ( $broadcast_data->is_empty() )
-
-	}
-	
-}
