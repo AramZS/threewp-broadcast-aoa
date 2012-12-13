@@ -333,7 +333,7 @@ class SD_Form
 	 */
 	public function make_label($options)
 	{
-		if (is_array($options)){
+		if ((is_array($options)) && !empty($options)){
 			// Merge the given options with the options we were constructed with.
 			$options = array_merge($this->options, $options);
 		} else {
