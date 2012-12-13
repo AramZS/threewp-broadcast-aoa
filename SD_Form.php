@@ -328,11 +328,8 @@ class SD_Form
 		return $returnValue;
 	}
 	
-	/**
-	 * Returns the label of this input.
-	 */
-	public function make_label($options)
-	{
+	public function consider_the_options($options){
+	
 		if ((is_array($options)) && !empty($options)){
 			// Merge the given options with the options we were constructed with.
 			$options = array_merge($this->options, $options);
@@ -345,6 +342,18 @@ class SD_Form
 				$options = array_merge($this->options, $options);
 			}
 		}
+
+		return $options;		
+	
+	}
+
+	/**
+	 * Returns the label of this input.
+	 */
+	public function make_label($options)
+	{
+		$options = $this->consider_the_options($options);
+		
 		if (!isset($options['label']))
 			return null;
 			
@@ -364,7 +373,7 @@ class SD_Form
 	public function make_description($options)
 	{
 		// Merge the given options with the options we were constructed with.
-		$options = array_merge($this->options, $options);
+		$options = $this->consider_the_options($options);
 		
 		if ($options['description'] == '')
 			return '';
@@ -433,7 +442,7 @@ class SD_Form
 	public function make_input($options)
 	{
 		// Merge the given options with the options we were constructed with.
-		$options = array_merge($this->options, $options);
+		$options = $this->consider_the_options($options);
 		
 		$extraOptions = '';
 		if ($options['disabled'])
