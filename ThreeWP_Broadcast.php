@@ -1587,7 +1587,7 @@ class ThreeWP_Broadcast extends ThreeWP_Broadcast_Base
 						add_post_meta( $new_post_id, $meta_key, $meta_value );
 					}
 				}
-				
+/**				
 				// Attached files are custom fields... but special custom fields. Therefore they need special treatment. Like retards. Retarded files.
 				if ( $has_thumbnail )
 				{
@@ -1595,7 +1595,14 @@ class ThreeWP_Broadcast extends ThreeWP_Broadcast_Base
 					if ( $new_attachment_id !== false )
 						update_post_meta( $new_post_id, '_thumbnail_id', $new_attachment_id );
 				}
-			}
+**/			}
+				// Attached files are custom fields... but special custom fields. Therefore they need special treatment. Like retards. Retarded files.
+				if ( $has_thumbnail )
+				{
+					$new_attachment_id = $this->copy_attachment( $attachment_data['thumbnail'], $new_post_id );
+					if ( $new_attachment_id !== false )
+						update_post_meta( $new_post_id, '_thumbnail_id', $new_attachment_id );
+				}
 			
 			// Sticky behaviour
 			$child_post_is_sticky = is_sticky( $new_post_id );
