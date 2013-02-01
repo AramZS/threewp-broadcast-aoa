@@ -418,7 +418,7 @@ class ThreeWP_Broadcast extends ThreeWP_Broadcast_Base
 		
 		'.$form->start().'
 		
-		' . $this->display_form_table( array($input_post_types) ) .'
+		' . $this->display_form_table( $input_post_types ) .'
 		
 		<p>
 		'.$form->make_input( $input_submit).'
@@ -1405,6 +1405,10 @@ class ThreeWP_Broadcast extends ThreeWP_Broadcast_Base
 			&&
 			( $post_type_supports_custom_fields || $post_type_supports_thumbnails)
 		);
+		if ( $custom_fields)
+		{
+			$post_custom_fields = get_post_custom( $post_id );
+			
 			$has_thumbnail = isset( $post_custom_fields['_thumbnail_id'] );
 			if ( $has_thumbnail)
 			{
@@ -1414,20 +1418,7 @@ class ThreeWP_Broadcast extends ThreeWP_Broadcast_Base
 				// Now that we know what the attachment id the thumbnail has, we must remove it from the attached files to avoid duplicates.
 				unset( $attachment_data[$thumbnail_id] );
 			}
-		if ( $custom_fields)
-		{
-			$post_custom_fields = get_post_custom( $post_id );
 			
-/**			$has_thumbnail = isset( $post_custom_fields['_thumbnail_id'] );
-			if ( $has_thumbnail)
-			{
-				$thumbnail_id = $post_custom_fields['_thumbnail_id'][0];
-				unset( $post_custom_fields['_thumbnail_id'] ); // There is a new thumbnail id for each blog.
-				$attachment_data['thumbnail'] = AttachmentData::from_attachment_id( $thumbnail_id, $upload_dir);
-				// Now that we know what the attachment id the thumbnail has, we must remove it from the attached files to avoid duplicates.
-				unset( $attachment_data[$thumbnail_id] );
-			}
-**/			
 			// Remove all the _internal custom fields.
 			$post_custom_fields = $this->keep_valid_custom_fields( $post_custom_fields);
 		}
@@ -1587,7 +1578,7 @@ class ThreeWP_Broadcast extends ThreeWP_Broadcast_Base
 						add_post_meta( $new_post_id, $meta_key, $meta_value );
 					}
 				}
-/**				
+				
 				// Attached files are custom fields... but special custom fields. Therefore they need special treatment. Like retards. Retarded files.
 				if ( $has_thumbnail )
 				{
@@ -1595,14 +1586,7 @@ class ThreeWP_Broadcast extends ThreeWP_Broadcast_Base
 					if ( $new_attachment_id !== false )
 						update_post_meta( $new_post_id, '_thumbnail_id', $new_attachment_id );
 				}
-**/			}
-				// Attached files are custom fields... but special custom fields. Therefore they need special treatment. Like retards. Retarded files.
-				if ( $has_thumbnail )
-				{
-					$new_attachment_id = $this->copy_attachment( $attachment_data['thumbnail'], $new_post_id );
-					if ( $new_attachment_id !== false )
-						update_post_meta( $new_post_id, '_thumbnail_id', $new_attachment_id );
-				}
+			}
 			
 			// Sticky behaviour
 			$child_post_is_sticky = is_sticky( $new_post_id );
