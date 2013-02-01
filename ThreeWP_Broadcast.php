@@ -3,7 +3,7 @@
 Plugin Name: ThreeWP Broadcast
 Plugin URI: http://mindreantre.se/program/threewp/threewp-broadcast/
 Description: Network plugin to broadcast a post to other blogs. Whitelist, blacklist, groups and automatic category+tag+custom field posting/creation available. 
-Version: 1.12
+Version: 1.13
 Author: edward mindreantre
 Author URI: http://www.mindreantre.se
 Author Email: edward@mindreantre.se
@@ -418,7 +418,7 @@ class ThreeWP_Broadcast extends ThreeWP_Broadcast_Base
 		
 		'.$form->start().'
 		
-		' . $this->display_form_table( $input_post_types ) .'
+		' . $this->display_form_table( array($input_post_types) ) .'
 		
 		<p>
 		'.$form->make_input( $input_submit).'
@@ -1405,10 +1405,6 @@ class ThreeWP_Broadcast extends ThreeWP_Broadcast_Base
 			&&
 			( $post_type_supports_custom_fields || $post_type_supports_thumbnails)
 		);
-		if ( $custom_fields)
-		{
-			$post_custom_fields = get_post_custom( $post_id );
-			
 			$has_thumbnail = isset( $post_custom_fields['_thumbnail_id'] );
 			if ( $has_thumbnail)
 			{
@@ -1418,7 +1414,20 @@ class ThreeWP_Broadcast extends ThreeWP_Broadcast_Base
 				// Now that we know what the attachment id the thumbnail has, we must remove it from the attached files to avoid duplicates.
 				unset( $attachment_data[$thumbnail_id] );
 			}
+		if ( $custom_fields)
+		{
+			$post_custom_fields = get_post_custom( $post_id );
 			
+/**			$has_thumbnail = isset( $post_custom_fields['_thumbnail_id'] );
+			if ( $has_thumbnail)
+			{
+				$thumbnail_id = $post_custom_fields['_thumbnail_id'][0];
+				unset( $post_custom_fields['_thumbnail_id'] ); // There is a new thumbnail id for each blog.
+				$attachment_data['thumbnail'] = AttachmentData::from_attachment_id( $thumbnail_id, $upload_dir);
+				// Now that we know what the attachment id the thumbnail has, we must remove it from the attached files to avoid duplicates.
+				unset( $attachment_data[$thumbnail_id] );
+			}
+**/			
 			// Remove all the _internal custom fields.
 			$post_custom_fields = $this->keep_valid_custom_fields( $post_custom_fields);
 		}
@@ -1927,7 +1936,11 @@ class ThreeWP_Broadcast extends ThreeWP_Broadcast_Base
 			
 		// Else, check that the user has write access.
 		switch_to_blog( $blog_id );
-		$returnValue = current_user_can( 'edit_posts' );                                                                                                                                                                                                        
+		
+		global $current_user;
+		wp_get_current_user();
+		$returnValue = current_user_can( 'edit_posts' );
+		
 		restore_current_blog();
 		return $returnValue;
 	}
