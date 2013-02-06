@@ -1137,7 +1137,7 @@ class ThreeWP_Broadcast extends ThreeWP_Broadcast_Base
 				'label' => $this->_( 'Create taxonomies automatically' ),
 				'title' => $this->_( "The taxonomies will be created if they don't exist on the selected blogs." ),
 			);
-			echo '<p class="broadcast_input_taxonomies_create">&emsp;'.$form->make_input( $input_taxonomies_create).' '.$form->make_label( $input_taxonomies_create).'</p>';
+			//echo '<p class="broadcast_input_taxonomies_create">&emsp;'.$form->make_input( $input_taxonomies_create).' '.$form->make_label( $input_taxonomies_create).'</p>';
 		}
 		
 		if ( $this->role_at_least( $this->get_site_option( 'role_custom_fields' ) ) && ( $post_type_supports_custom_fields || $post_type_supports_thumbnails) )
@@ -1410,6 +1410,11 @@ class ThreeWP_Broadcast extends ThreeWP_Broadcast_Base
 			$post_custom_fields = get_post_custom( $post_id );
 			
 			$has_thumbnail = isset( $post_custom_fields['_thumbnail_id'] );
+			unset( $post_custom_fields['is_simple'] );
+			unset( $post_custom_fields['post_prime_cat'] );
+			unset( $post_custom_fields['is_featured'] );
+			unset( $post_custom_fields['on_home'] );
+			unset( $post_custom_fields['in_slider'] );
 			if ( $has_thumbnail)
 			{
 				$thumbnail_id = $post_custom_fields['_thumbnail_id'][0];
