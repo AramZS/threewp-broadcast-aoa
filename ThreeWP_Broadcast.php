@@ -418,7 +418,7 @@ class ThreeWP_Broadcast extends ThreeWP_Broadcast_Base
 		
 		'.$form->start().'
 		
-		' . $this->display_form_table( $input_post_types ) .'
+		' . $this->display_form_table( array($input_post_types) ) .'
 		
 		<p>
 		'.$form->make_input( $input_submit).'
